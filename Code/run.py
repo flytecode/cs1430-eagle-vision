@@ -9,7 +9,6 @@ import sys
 import argparse
 import re
 from datetime import datetime
-import matplotlib
 import tensorflow as tf
 
 import hyperparameters as hp
@@ -155,7 +154,6 @@ def train(model, datasets, checkpoint_path, logs_path, init_epoch):
         initial_epoch=init_epoch,
         shuffle=True
     )
-    tf.keras.models.save_model(model_TL,'my_model.hdf5')
 
 
 def test(model, test_data):

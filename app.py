@@ -33,10 +33,12 @@ def main():
             with st.spinner('Model working....'):
                 plt.imshow(image)
                 plt.axis("off")
-                predictions = predict(image)
+                top_classes, top_confidences = predict(image)
                 time.sleep(1)
                 st.success('Classified')
-                st.write(predictions)
+                for i in range(0, len(top_classes)):
+                    st.write(f"{top_classes[i]} with a { top_confidences[i] } % confidence.")
+
                 st.pyplot(fig)
 
 
@@ -67,13 +69,22 @@ def predict(image):
     predictions = model.predict(test_image)
     class_names = train_gen.class_indices
     class_names = dict((v,k) for k,v in class_names.items())
-    print(class_names)
-    print(predictions)
+    # print(class_names)
+    # print(predictions)
     scores = tf.nn.softmax(predictions[0])
     scores = scores.numpy()
     
-    result = f"{class_names[np.argmax(scores)]} with a { (100 * np.max(scores)).round(2) } % confidence." 
-    return result
+    # result = [f"{class_names[np.argmax(scores)]} with a { (100 * np.max(scores)).round(2) } % confidence.",
+    # f"{class_names[np.argmax(scores)]} with a { (100 * np.max(scores)).round(2) } % confidence.",
+    # f"{class_names[np.argmax(scores)]} with a { (100 * np.max(scores)).round(2) } % confidence.",]
+    print(np.max(scores))
+    print(np.argpartition(scores, -3)[-3:])
+    top_classes = []
+    top_confidences = []
+    for i in np.argpartition(scores, -3)[-3:]:
+        top_classes.append(class_names[i])
+        top_confidences.append((100 * scores[i]).round(2))
+    return top_classes, top_confidences
     
 
 if __name__ == "__main__":

@@ -9,8 +9,10 @@ from tensorflow.keras import layers
 import tensorflow_hub as hub
 import matplotlib.pyplot as plt
 
-train_dir = (r'C:\Users\Andy Zhou\cs1430\cs1430-eagle-vision\cs1430-eagle-vision\data\test')
-test_dir = (r'C:\Users\Andy Zhou\cs1430\cs1430-eagle-vision\cs1430-eagle-vision\data\train')
+
+#TODO: IMPORTANT TO SET THESE FILEPATHS CORRECTLY
+train_dir = (r'C:\Users\Andy Zhou\cs1430\cs1430-eagle-vision\cs1430-eagle-vision\data\train')
+test_dir = (r'C:\Users\Andy Zhou\cs1430\cs1430-eagle-vision\cs1430-eagle-vision\data\test')
 
 data_args = dict(rescale=1./255, validation_split=.20, rotation_range=10, shear_range=5,
                 height_shift_range=0.1, width_shift_range=0.1, horizontal_flip=True,
@@ -38,7 +40,11 @@ for image_batch, label_batch in train_gen:
   break
   image_batch.shape, label_batch.shape
 
-print (train_gen.class_indices)
+list = []
+for entry in train_gen.class_indices:
+  list.append(str(entry)[4:])
+
+print(list)
 
 base_model = tf.keras.Sequential([
  Conv2D(16, 3, 1, padding='same',
